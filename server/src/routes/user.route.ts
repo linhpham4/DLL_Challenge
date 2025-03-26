@@ -23,26 +23,26 @@ export const users: User[] = [{
   id: 1,
 }];
 
-const userProperties = Object.keys(users[0]);
+export const userProperties = Object.keys(users[0]);
 
 
 
 // Error messages
-const noSortParamError = "Cannot have order parameter without sort parameter.";
-const invalidSortError = `Sort parameter must be one of these user properties: ${userProperties}`;
-const invalidOrderError = "Order parameter must be either asc or desc.";
+export const noSortParamError = "Cannot have order parameter without sort parameter.";
+export const invalidSortError = `Sort parameter must be one of these user properties: ${userProperties}`;
+export const invalidOrderError = "Order parameter must be either asc or desc.";
 
 
 
 // Sorting algorithms based on data type
-const sortNumber = (user1: User, user2: User, sort: keyof User, order: string) => {
+export const sortNumber = (user1: User, user2: User, sort: keyof User, order: string) => {
   if (order === 'desc') {
     return user2[sort] - user1[sort];
   };
   return user1[sort] - user2[sort];
 };
 
-const sortString = (user1: User, user2: User, sort: keyof User, order: string) => {
+export const sortString = (user1: User, user2: User, sort: keyof User, order: string) => {
   if (order === 'desc') {
     return user2[sort].localeCompare(user1[sort]);
   };
@@ -52,7 +52,7 @@ const sortString = (user1: User, user2: User, sort: keyof User, order: string) =
 
 
 // Sorting users
-const getUsers = (sort: string, order: string) => {
+export const getUsers = (sort: string, order: string) => {
   const sortedUsers: User[] = [...users];
 
   // Validations
