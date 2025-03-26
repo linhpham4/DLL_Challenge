@@ -35,40 +35,40 @@ export const invalidOrderError = "Order parameter must be either asc or desc.";
 
 
 // Sorting algorithms based on data type
-export const sortNumber = (user1: User, user2: User, sort: keyof User, order: string) => {
+export const sortNumber = (user1: User, user2: User, property: keyof User, order: string) => {
   if (order === 'desc') {
-    return user2[sort] - user1[sort];
+    return user2[property] - user1[property];
   };
-  return user1[sort] - user2[sort];
+  return user1[property] - user2[property];
 };
 
-export const sortString = (user1: User, user2: User, sort: keyof User, order: string) => {
+export const sortString = (user1: User, user2: User, property: keyof User, order: string) => {
   if (order === 'desc') {
-    return user2[sort].localeCompare(user1[sort]);
+    return user2[property].localeCompare(user1[property]);
   };
-  return user1[sort].localeCompare(user2[sort]);
+  return user1[property].localeCompare(user2[property]);
 };
 
 
 
 // Sorting users
-export const getUsers = (sort: string, order: string) => {
+export const getUsers = (property: string, order: string) => {
   const sortedUsers: User[] = [...users];
 
   // Validations
-  if(sort && !order) {
+  if(property && !order) {
     order = 'asc';
   };
 
-  if (!sort && order) {
+  if (!property && order) {
     throw new Error(noSortParamError);
   }
 
-  if (!sort) {
+  if (!property) {
     return sortedUsers;
   }
 
-  if (sort && !userProperties.includes(sort)) {
+  if (property && !userProperties.includes(property)) {
     throw new Error(invalidSortError);
   }
 
@@ -76,15 +76,15 @@ export const getUsers = (sort: string, order: string) => {
     throw new Error(invalidOrderError);
   }
 
-  if (sort) {
+  if (property) {
     // Determine which sorting algorithm to use before actually sorting
     let comparator = sortNumber;
-    if (typeof users[0][sort] === 'string') {
+    if (typeof users[0][property] === 'string') {
       comparator = sortString;
     };
 
     sortedUsers.sort((a,b) => {
-      return comparator(a, b, sort, order);
+      return comparator(a, b, property, order);
     });
 
     return sortedUsers;
@@ -96,9 +96,9 @@ export const getUsers = (sort: string, order: string) => {
 // Get request
 router.get('/', (req: Request, res: Response) => {
   try {
-    const sort = req.query.sort as string;
+    const property = req.query.sort as string;
     let order = req.query.order as string;
-    const usersList = getUsers(sort, order);
+    const usersList = getUsers(property, order);
     res.status(200).send(usersList);
 
   } catch (error) {
