@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import logger from '../config/logger';
 
 const router = express.Router();
 
@@ -96,12 +97,16 @@ export const getUsers = (property: string, order: string) => {
 // Get request
 router.get('/', (req: Request, res: Response) => {
   try {
+    logger.info(`Received ${req.method} request for ${req.originalUrl}`);
+
     const property = req.query.sort as string;
     let order = req.query.order as string;
     const usersList = getUsers(property, order);
     res.status(200).send(usersList);
 
   } catch (error) {
+    logger.error(`GET request for ${req.originalUrl} failed: ${error.message}`);
+    
     if (error.message === noSortParamError) {
       res.status(400).json({error: error.message});
     } else if (error.message === invalidSortError) {
